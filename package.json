@@ -18,6 +18,9 @@
     "dotenv": "^16.0.1",
     "mongoose": "^6.5.1",
     "node-fetch": "^3.3.0",
+    "puppeteer": "^19.7.4",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-adblocker": "^2.13.6",
     "undici": "^5.12.0"
   }
 }

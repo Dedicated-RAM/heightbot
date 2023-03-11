@@ -2,6 +2,9 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const User = require('../../schemas/profiles');
 const mongoose = require('mongoose');
 const convert = require('convert-units');
+const fs = require('fs');
+const { getImage } = require('../../helpers/websitehandler');
+const { cleanDir } = require('../../helpers/photocleaner');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -61,12 +64,13 @@ module.exports = {
             kv[user.username] = await User.findOne({ id: user.id });
         }
 
-        console.log(kv);
+        //console.log(kv);
         // const user = interaction.options.getUser("user3")
         // console.log(user);
         var localData_array = []
         var id_count = 1;
-        const colors = ["FF0000", "FFFF00", "FF00FF", "00FF00", "00FFFF", "00FFEE", "EEFF00", "FFEE00", "EE00FF"]
+        const colors = ["DFFF00", "FFBF00", "FF7F50", "DE3163", "9FE2BF", "40E0D0", "6495ED", "CCCCFF",
+                            "FFC300", "FF5733", "C70039", "900C3F", "581845"]
         var color = "000000"
 
         for (var key in kv){
@@ -87,12 +91,27 @@ module.exports = {
             id_count += 1;
         }
 
-        console.log(JSON.stringify(localData_array));
+        //console.log(JSON.stringify(localData_array));
+
+        //const filepath = getImage(localData_array);
+
+        //console.log(filepath);
 
 
-        await interaction.editReply({
-            content: "hi"
+        getImage(interaction.user.username, localData_array).then(value => {
+            
+            interaction.editReply({
+                files: [{ attachment: value }] 
+            });
+            console.log(value);
+            cleanDir();
+        }).catch(error => {
+            // `deleteMessages` encountered an error
+            // the error will be an Error Object
+            console.log(error);
         });
+
+        
 
         //const userData = await User.findOne({ id: user.id })
         //user.username
