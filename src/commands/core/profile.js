@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const User = require('../../schemas/profiles');
 const mongoose = require('mongoose');
+const convert = require('convert-units');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -32,11 +33,12 @@ module.exports = {
         } else {
 
             const centi = userData.height;
-            const inch = (Math.round((centi * 0.3937) * 4) / 4).toFixed(2) % 12;   // rounds to nearest .25
-            const feet = Math.floor( ( Math.round( (centi * 0.3937) * 4) / 4).toFixed(2) / 12);   // rounds to nearest .25
+            //const inch = (Math.round((centi * 0.3937) * 4) / 4).toFixed(2) % 12;   // rounds to nearest .25
+            const inch = (Math.round(convert(centi).from("cm").to("in") * 4) / 4).toFixed(2) % 12;
+            const feet = Math.floor(convert(centi).from("cm").to("ft"));   // rounds to nearest .25
 
             const heightEmbed = new EmbedBuilder()
-            .setColor(0xFFFFFF)
+            .setColor(userData.profileColor)
             .setTitle(`${user.username}'s profile`)
             .setThumbnail(user.displayAvatarURL())
             .addFields(

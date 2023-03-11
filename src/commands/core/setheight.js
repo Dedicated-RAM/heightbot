@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const User = require('../../schemas/profiles');
 const mongoose = require('mongoose');
+const convert = require('convert-units');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -61,20 +62,19 @@ module.exports = {
             // centimeters  --> nearest .01th
             // inches       --> nearest 0.25
             // feet         --> whole number
-            centi = Math.round(centi).toFixed(2);
-            inch = 0.3937 * centi;  // convert centi to inches
-            inch = (Math.round(inch * 4) / 4).toFixed(2);   // rounds to nearest .25
-            feet = Math.floor(inch/12); // integer division
-            inch = inch % 12;   // take remainder back to inches
+            centi = Number(centi.toFixed(2));
+            inch = Number(convert(centi).from("cm").to("in").toFixed(2));
+            feet = Math.floor(inch / 12);
+            inch = (inch % 12).toFixed(2);
 
         } else if ( interaction.options.getSubcommand() === "imperial" ){
+
             feet = interaction.options.get("feet").value;
             inch = interaction.options.get("inches").value ?? 0;
             const temp = inch + feet * 12;
-            //console.log(temp);
             // format the numbers:
-            inch = (Math.round(inch * 4) / 4).toFixed(2);   // rounds to nearest .25
-            centi = (temp / 0.3937).toFixed(2); // convert formatted inches to centi
+            inch = Number((Math.round(inch * 4) / 4).toFixed(2));   // rounds to nearest .25
+            centi = Number(convert(temp).from("in").to("cm").toFixed(2)); // convert formatted inches to centi
         }
 
         userData.height = centi;    // heights stored in centimeters
@@ -82,8 +82,17 @@ module.exports = {
         await userData.save().catch(console.error);
 
         
+        // const heightEmbed = new EmbedBuilder()
+        //     .setColor("#"+userData.profileColor)
+        //     .setTitle(`${user.username}'s height updated!`)
+        //     .setThumbnail(user.displayAvatarURL())
+        //     .addFields(
+        //         { name: "Metric", value: `** ${centi} cm** `, inline: true },
+        //         { name: "Imperial", value: `** ${feet}\' ${inch}\" **`, inline: true },
+        //         )
+
         const heightEmbed = new EmbedBuilder()
-            .setColor(0xFFFFFF)
+            .setColor(userData.profileColor)
             .setTitle(`${user.username}'s height updated!`)
             .setThumbnail(user.displayAvatarURL())
             .addFields(
