@@ -56,7 +56,7 @@ module.exports = {
         var feet = 0;
 
         if( interaction.options.getSubcommand() === "metric" ){
-            centi = interaction.options.get("centimeters").value
+            centi = interaction.options.getNumber("centimeters");
 
             // format the numbers:
             // centimeters  --> nearest .01th
@@ -69,9 +69,9 @@ module.exports = {
 
         } else if ( interaction.options.getSubcommand() === "imperial" ){
 
-            feet = interaction.options.get("feet").value;
-            inch = interaction.options.get("inches").value ?? 0;
-            const temp = inch + feet * 12;
+            feet = interaction.options.getInteger("feet");
+            inch = interaction.options.getNumber("inches") || 0;
+            const temp = inch + Number(feet) * 12;
             // format the numbers:
             inch = Number((Math.round(inch * 4) / 4).toFixed(2));   // rounds to nearest .25
             centi = Number(convert(temp).from("in").to("cm").toFixed(2)); // convert formatted inches to centi

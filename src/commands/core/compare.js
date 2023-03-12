@@ -20,7 +20,6 @@ module.exports = {
             option => option
             .setName("user2")
             .setDescription("2nd user")
-            .setRequired(true)
             )
         .addUserOption(
             option => option
