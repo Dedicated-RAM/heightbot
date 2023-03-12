@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const directoryPath = 'image_cache';
-const maxFileCount = 7;
+const maxFileCount = 15;
 const fileExtension = '.png';
 const deleteCount = 5;
 

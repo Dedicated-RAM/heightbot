@@ -11,6 +11,27 @@
   }
 ]
 
+[
+  {
+    name: 'Husky',
+    cm: 180.34,
+    ft: 5,
+    inch: '11.00',
+    background_color: '#00FF00',
+    gender: 'male',
+    id: 1
+  },
+  {
+    name: 'HuskyDev',
+    cm: 162.56,
+    ft: 5,
+    inch: '4.00',
+    background_color: '#EEFF00',
+    gender: 'male',
+    id: 2
+  }
+]
+
 
 [
   {
